@@ -1,0 +1,12 @@
+{
+  "name": "inflearn-enhancer",
+  "version": "1.0.0",
+  "description": "Happy study like youtube video player",
+  "main": "index.js",
+  "repository": "https://github.com/nobel6018/inflearn-enhancer",
+  "author": "Lee, YoungHoon",
+  "license": "MIT",
+  "devDependencies": {
+    "prettier": "^2.7.1"
+  }
+}
