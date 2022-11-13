@@ -14,7 +14,14 @@ if (window === top) {
 }
 
 function keyPressLogic(e) {
-  if ((e.shiftKey && e.keyCode === 190) || (e.shiftKey && e.keyCode === 188) || e.keyCode === 38 || e.keyCode === 40) {
+  if (
+    (e.shiftKey && e.keyCode === 190) ||
+    (e.shiftKey && e.keyCode === 188) ||
+    e.keyCode === 38 ||
+    e.keyCode === 40 ||
+    e.keyCode === 39 ||
+    e.keyCode === 37
+  ) {
     preLogic();
 
     const video = document.getElementsByTagName('video')[0];
@@ -79,6 +86,20 @@ function keyPressLogic(e) {
       }
     }
 
+    // kepress: →
+    if (e.keyCode === 39) {
+      const element = document.querySelector('div.ytp-doubletap-ui-legacy');
+      element.style.display = '';
+      element.setAttribute('data-side', 'forward');
+    }
+
+    // keypress: ←
+    if (e.keyCode === 37) {
+      const element = document.querySelector('div.ytp-doubletap-ui-legacy');
+      element.style.display = '';
+      element.setAttribute('data-side', 'back');
+    }
+
     document.querySelector('div#ytp-bezel-wrapper').classList.remove('ytp-bezel-text-hide');
     postLogic();
   }
@@ -139,6 +160,7 @@ function preLogic() {
 function postLogic() {
   timeoutId = setTimeout(() => {
     document.querySelector('div#ytp-bezel-wrapper').style.display = 'none';
+    document.querySelector('div.ytp-doubletap-ui-legacy').style.display = 'none';
   }, 1000);
 }
 
