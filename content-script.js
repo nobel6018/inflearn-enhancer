@@ -1,4 +1,4 @@
-let timeoutId = null;
+let timeout = null;
 
 function addElement() {
   fetch(chrome.runtime.getURL('/indicator.html'))
@@ -22,12 +22,12 @@ function keyPressLogic(e) {
     e.keyCode === 39 ||
     e.keyCode === 37
   ) {
-    preLogic();
-
     const video = document.getElementsByTagName('video')[0];
 
     // keypress: >
     if (e.shiftKey && e.keyCode === 190) {
+      preLogic();
+
       document.querySelector('div.ytp-bezel-text').textContent = `${video.playbackRate.toString()}x`;
 
       const volumeUpIcon = `<svg height='100%' version='1.1' viewBox='0 0 36 36' width='100%'>
@@ -36,10 +36,15 @@ function keyPressLogic(e) {
                 id='ytp-id-216'></path>
         </svg>`;
       setBezelIcon(volumeUpIcon);
+
+      document.querySelector('div#ytp-bezel-wrapper').classList.remove('ytp-bezel-text-hide');
+      postLogic();
     }
 
     // keypress: <
     if (e.shiftKey && e.keyCode === 188) {
+      preLogic();
+
       document.querySelector('div.ytp-bezel-text').textContent = `${video.playbackRate.toString()}x`;
 
       const volumeDownIcon = `<svg height='100%' version='1.1' viewBox='0 0 36 36' width='100%'>
@@ -48,10 +53,15 @@ function keyPressLogic(e) {
                 id='ytp-id-242'></path>
         </svg>`;
       setBezelIcon(volumeDownIcon);
+
+      document.querySelector('div#ytp-bezel-wrapper').classList.remove('ytp-bezel-text-hide');
+      postLogic();
     }
 
     // keypress: ↑
     if (e.keyCode === 38) {
+      preLogic();
+
       const volume = Math.round(video.volume * 100);
       document.querySelector('div.ytp-bezel-text').textContent = `${volume}%`;
 
@@ -61,10 +71,15 @@ function keyPressLogic(e) {
                 fill='#fff' id='ytp-id-371'></path>
         </svg>`;
       setBezelIcon(volumeUpIcon);
+
+      document.querySelector('div#ytp-bezel-wrapper').classList.remove('ytp-bezel-text-hide');
+      postLogic();
     }
 
     // keypress: ↓
     if (e.keyCode === 40) {
+      preLogic();
+
       const volume = Math.round(video.volume * 100);
       document.querySelector('div.ytp-bezel-text').textContent = `${volume}%`;
 
@@ -84,24 +99,32 @@ function keyPressLogic(e) {
           </svg>`;
         setBezelIcon(volumeDownIcon);
       }
+
+      document.querySelector('div#ytp-bezel-wrapper').classList.remove('ytp-bezel-text-hide');
+      postLogic();
     }
 
     // kepress: →
     if (e.keyCode === 39) {
-      const element = document.querySelector('div.ytp-doubletap-ui-legacy');
-      element.style.display = '';
-      element.setAttribute('data-side', 'forward');
+      const seeking = document.querySelector('div.ytp-doubletap-ui-legacy');
+      seeking.style.display = '';
+      seeking.setAttribute('data-side', 'forward');
+
+      restartSeekingAnimation();
+
+      postLogic();
     }
 
     // keypress: ←
     if (e.keyCode === 37) {
-      const element = document.querySelector('div.ytp-doubletap-ui-legacy');
-      element.style.display = '';
-      element.setAttribute('data-side', 'back');
-    }
+      const seeking = document.querySelector('div.ytp-doubletap-ui-legacy');
+      seeking.style.display = '';
+      seeking.setAttribute('data-side', 'back');
 
-    document.querySelector('div#ytp-bezel-wrapper').classList.remove('ytp-bezel-text-hide');
-    postLogic();
+      restartSeekingAnimation();
+
+      postLogic();
+    }
   }
 }
 
@@ -117,6 +140,13 @@ function restartBezelAnimation() {
   bezel.classList.remove('ytp-bezel');
   void bezel.offsetWidth;
   bezel.classList.add('ytp-bezel');
+}
+
+function restartSeekingAnimation() {
+  const seeking = document.querySelector('div.ytp-doubletap-ui-legacy');
+  seeking.classList.remove('ytp-doubletap-ui-legacy');
+  void seeking.offsetWidth;
+  seeking.classList.add('ytp-doubletap-ui-legacy');
 }
 
 function videoEventListener() {
@@ -150,18 +180,18 @@ function videoEventListener() {
 }
 
 function preLogic() {
-  if (timeoutId) {
-    clearTimeout(timeoutId);
+  if (timeout) {
+    clearTimeout(timeout);
   }
   document.querySelector('div#ytp-bezel-wrapper').classList.add('ytp-bezel-text-hide');
   document.querySelector('div#ytp-bezel-wrapper').style.display = '';
 }
 
 function postLogic() {
-  timeoutId = setTimeout(() => {
+  timeout = setTimeout(() => {
     document.querySelector('div#ytp-bezel-wrapper').style.display = 'none';
     document.querySelector('div.ytp-doubletap-ui-legacy').style.display = 'none';
-  }, 1000);
+  }, 500);
 }
 
 setTimeout(() => {
