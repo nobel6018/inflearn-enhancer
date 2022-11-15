@@ -98,6 +98,8 @@ function keyPressLogic(e) {
 
   // kepress: →
   if (e.keyCode === 39) {
+    clearTimeoutLogic();
+
     const seeking = document.querySelector('div.ytp-doubletap-ui-legacy');
     seeking.style.display = '';
     seeking.setAttribute('data-side', 'forward');
@@ -109,6 +111,8 @@ function keyPressLogic(e) {
 
   // keypress: ←
   if (e.keyCode === 37) {
+    clearTimeoutLogic();
+
     const seeking = document.querySelector('div.ytp-doubletap-ui-legacy');
     seeking.style.display = '';
     seeking.setAttribute('data-side', 'back');
@@ -171,11 +175,15 @@ function videoEventListener() {
 }
 
 function preLogic() {
+  clearTimeoutLogic();
+  document.querySelector('div#ytp-bezel-wrapper').classList.add('ytp-bezel-text-hide');
+  document.querySelector('div#ytp-bezel-wrapper').style.display = '';
+}
+
+function clearTimeoutLogic() {
   if (timeout) {
     clearTimeout(timeout);
   }
-  document.querySelector('div#ytp-bezel-wrapper').classList.add('ytp-bezel-text-hide');
-  document.querySelector('div#ytp-bezel-wrapper').style.display = '';
 }
 
 function postLogic() {
