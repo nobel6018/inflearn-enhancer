@@ -6,6 +6,9 @@
   "repository": "https://github.com/nobel6018/inflearn-enhancer",
   "author": "Lee, YoungHoon",
   "license": "MIT",
+  "scripts": {
+    "zip": "zip inflearn-enhancer.zip -r manifest.json content-script.js indicator.html style.css images"
+  },
   "devDependencies": {
     "prettier": "^2.7.1"
   }
